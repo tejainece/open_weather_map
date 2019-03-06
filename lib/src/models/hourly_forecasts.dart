@@ -1,6 +1,8 @@
 import 'models.dart';
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
+import 'simplified_models.dart' as simple;
+
 class HourlyForecast {
   int dt;
 
@@ -35,4 +37,6 @@ class HourlyForecasts {
   String toString() => toJson().toString();
 
   static final serializer = HourlyForecastsSerializer();
+
+  simple.HourlyForecasts simplified() => simple.HourlyForecasts.from(this);
 }

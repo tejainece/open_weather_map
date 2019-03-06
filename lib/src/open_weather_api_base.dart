@@ -26,6 +26,8 @@ class OpenWeatherApi {
 
     if (resp.statusCode != 200) throw resp;
 
+    print(resp.body);
+
     final ret = resp.decodeJson(CurrentWeather.serializer.fromMap);
 
     return ret;

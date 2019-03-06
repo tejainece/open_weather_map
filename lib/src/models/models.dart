@@ -1,5 +1,7 @@
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
+import 'simplified_models.dart' as simple;
+
 export 'daily_forecast.dart';
 export 'hourly_forecasts.dart';
 
@@ -183,4 +185,6 @@ class CurrentWeather {
   String toString() => toJson().toString();
 
   static final serializer = CurrentWeatherSerializer();
+
+  simple.Weather simplified() => simple.Weather.from(this);
 }
