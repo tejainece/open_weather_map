@@ -80,8 +80,8 @@ abstract class _$RainSerializer implements Serializer<Rain> {
   Rain fromMap(Map map) {
     if (map == null) return null;
     final obj = new Rain();
-    obj.oneH = map['1h'] as int;
-    obj.threeH = map['3h'] as int;
+    obj.oneH = map['1h'] as double;
+    obj.threeH = map['3h'] as double;
     return obj;
   }
 }
@@ -205,6 +205,12 @@ abstract class _$CurrentWeatherSerializer
   Serializer<Clouds> __cloudsSerializer;
   Serializer<Clouds> get _cloudsSerializer =>
       __cloudsSerializer ??= new CloudsSerializer();
+  Serializer<Rain> __rainSerializer;
+  Serializer<Rain> get _rainSerializer =>
+      __rainSerializer ??= new RainSerializer();
+  Serializer<Snow> __snowSerializer;
+  Serializer<Snow> get _snowSerializer =>
+      __snowSerializer ??= new SnowSerializer();
   @override
   Map<String, dynamic> toMap(CurrentWeather model) {
     if (model == null) return null;
@@ -219,12 +225,11 @@ abstract class _$CurrentWeatherSerializer
             (val) => _conditionSerializer.toMap(val as Condition)));
     setMapValue(ret, 'wind', _windSerializer.toMap(model.wind));
     setMapValue(ret, 'clouds', _cloudsSerializer.toMap(model.clouds));
+    setMapValue(ret, 'rain', _rainSerializer.toMap(model.rain));
+    setMapValue(ret, 'snow', _snowSerializer.toMap(model.snow));
     setMapValue(ret, 'dt', model.dt);
     setMapValue(ret, 'id', model.id);
     setMapValue(ret, 'name', model.name);
-    setMapValue(ret, 'cod', model.cod);
-    setMapValue(ret, 'unit', model.unit);
-    setMapValue(ret, 'lang', model.lang);
     return ret;
   }
 
@@ -239,12 +244,147 @@ abstract class _$CurrentWeatherSerializer
         (val) => _conditionSerializer.fromMap(val as Map));
     obj.wind = _windSerializer.fromMap(map['wind'] as Map);
     obj.clouds = _cloudsSerializer.fromMap(map['clouds'] as Map);
+    obj.rain = _rainSerializer.fromMap(map['rain'] as Map);
+    obj.snow = _snowSerializer.fromMap(map['snow'] as Map);
     obj.dt = map['dt'] as int;
     obj.id = map['id'] as int;
     obj.name = map['name'] as String;
-    obj.cod = map['cod'] as int;
-    obj.unit = map['unit'] as String;
-    obj.lang = map['lang'] as String;
+    return obj;
+  }
+}
+
+abstract class _$CitySerializer implements Serializer<City> {
+  Serializer<Coord> __coordSerializer;
+  Serializer<Coord> get _coordSerializer =>
+      __coordSerializer ??= new CoordSerializer();
+  @override
+  Map<String, dynamic> toMap(City model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'id', model.id);
+    setMapValue(ret, 'name', model.name);
+    setMapValue(ret, 'coord', _coordSerializer.toMap(model.coord));
+    setMapValue(ret, 'country', model.country);
+    return ret;
+  }
+
+  @override
+  City fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new City();
+    obj.id = map['id'] as int;
+    obj.name = map['name'] as String;
+    obj.coord = _coordSerializer.fromMap(map['coord'] as Map);
+    obj.country = map['country'] as String;
+    return obj;
+  }
+}
+
+abstract class _$DailyTemperatureSerializer
+    implements Serializer<DailyTemperature> {
+  final _doubleToNumProcessor = const DoubleToNumProcessor();
+  @override
+  Map<String, dynamic> toMap(DailyTemperature model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'day', _doubleToNumProcessor.serialize(model.tempDay));
+    setMapValue(ret, 'min', _doubleToNumProcessor.serialize(model.tempMin));
+    setMapValue(ret, 'max', _doubleToNumProcessor.serialize(model.tempMax));
+    setMapValue(ret, 'night', _doubleToNumProcessor.serialize(model.tempNight));
+    setMapValue(ret, 'eve', _doubleToNumProcessor.serialize(model.tempEvening));
+    setMapValue(
+        ret, 'morn', _doubleToNumProcessor.serialize(model.tempMorning));
+    return ret;
+  }
+
+  @override
+  DailyTemperature fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new DailyTemperature();
+    obj.tempDay = _doubleToNumProcessor.deserialize(map['day'] as num);
+    obj.tempMin = _doubleToNumProcessor.deserialize(map['min'] as num);
+    obj.tempMax = _doubleToNumProcessor.deserialize(map['max'] as num);
+    obj.tempNight = _doubleToNumProcessor.deserialize(map['night'] as num);
+    obj.tempEvening = _doubleToNumProcessor.deserialize(map['eve'] as num);
+    obj.tempMorning = _doubleToNumProcessor.deserialize(map['morn'] as num);
+    return obj;
+  }
+}
+
+abstract class _$DailyForecastSerializer implements Serializer<DailyForecast> {
+  Serializer<DailyTemperature> __dailyTemperatureSerializer;
+  Serializer<DailyTemperature> get _dailyTemperatureSerializer =>
+      __dailyTemperatureSerializer ??= new DailyTemperatureSerializer();
+  Serializer<Condition> __conditionSerializer;
+  Serializer<Condition> get _conditionSerializer =>
+      __conditionSerializer ??= new ConditionSerializer();
+  @override
+  Map<String, dynamic> toMap(DailyForecast model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'dt', model.dt);
+    setMapValue(
+        ret, 'temp', _dailyTemperatureSerializer.toMap(model.temperature));
+    setMapValue(
+        ret,
+        'weather',
+        codeIterable(model.conditions,
+            (val) => _conditionSerializer.toMap(val as Condition)));
+    setMapValue(ret, 'pressure', model.pressure);
+    setMapValue(ret, 'humidity', model.humidity);
+    setMapValue(ret, 'speed', model.speed);
+    setMapValue(ret, 'deg', model.degree);
+    setMapValue(ret, 'clouds', model.clouds);
+    return ret;
+  }
+
+  @override
+  DailyForecast fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new DailyForecast();
+    obj.dt = map['dt'] as int;
+    obj.temperature = _dailyTemperatureSerializer.fromMap(map['temp'] as Map);
+    obj.conditions = codeIterable<Condition>(map['weather'] as Iterable,
+        (val) => _conditionSerializer.fromMap(val as Map));
+    obj.pressure = map['pressure'] as double;
+    obj.humidity = map['humidity'] as int;
+    obj.speed = map['speed'] as double;
+    obj.degree = map['deg'] as int;
+    obj.clouds = map['clouds'] as int;
+    return obj;
+  }
+}
+
+abstract class _$DailyForecastsSerializer
+    implements Serializer<DailyForecasts> {
+  Serializer<City> __citySerializer;
+  Serializer<City> get _citySerializer =>
+      __citySerializer ??= new CitySerializer();
+  Serializer<DailyForecast> __dailyForecastSerializer;
+  Serializer<DailyForecast> get _dailyForecastSerializer =>
+      __dailyForecastSerializer ??= new DailyForecastSerializer();
+  @override
+  Map<String, dynamic> toMap(DailyForecasts model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'city', _citySerializer.toMap(model.city));
+    setMapValue(ret, 'cnt', model.count);
+    setMapValue(
+        ret,
+        'list',
+        codeIterable(model.forecasts,
+            (val) => _dailyForecastSerializer.toMap(val as DailyForecast)));
+    return ret;
+  }
+
+  @override
+  DailyForecasts fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new DailyForecasts();
+    obj.city = _citySerializer.fromMap(map['city'] as Map);
+    obj.count = map['cnt'] as int;
+    obj.forecasts = codeIterable<DailyForecast>(map['list'] as Iterable,
+        (val) => _dailyForecastSerializer.fromMap(val as Map));
     return obj;
   }
 }

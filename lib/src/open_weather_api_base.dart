@@ -108,6 +108,84 @@ class OpenWeatherApi {
 
     return ret;
   }
+
+  Future<DailyForecasts> dailyForecastsById(String id,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req =
+        route.get.path('forecast/daily').queries({"id": id, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(DailyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<DailyForecasts> dailyForecastsByName(String name,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req =
+        route.get.path('forecast/daily').queries({"q": name, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(DailyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<DailyForecasts> dailyForecastsByCoordinate(Coord coord,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req = route.get.path('forecast/daily').queries(
+        {"lon": coord.longitude, "lat": coord.latitude, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(DailyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<DailyForecasts> dailyForecastsByZipCode(
+      String zipcode, Country country,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req = route.get
+        .path('forecast/daily')
+        .queries({"zip": "$zipcode,$country", "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(DailyForecasts.serializer.fromMap);
+
+    return ret;
+  }
 }
 
 class Country {

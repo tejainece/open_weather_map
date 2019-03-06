@@ -1,5 +1,7 @@
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
+export 'daily_forecast.dart';
+
 /// Coordinate
 class Coord {
   /// City geo location, longitude
@@ -50,10 +52,10 @@ class Snow {
 /// Rain weather information
 class Rain {
   /// Rain volume for the last 1 hour, mm
-  int oneH;
+  double oneH;
 
   /// Rain volume for the last 3 hours, mm
-  int threeH;
+  double threeH;
 
   Map<String, dynamic> toJson() => serializer.toMap(this);
 
@@ -158,13 +160,18 @@ class CurrentWeather {
 
   Clouds clouds;
 
+  Rain rain;
+
+  Snow snow;
+
+  /// Time of data calculation, unix, UTC
   int dt;
 
+  /// City id
   int id;
 
+  /// City name
   String name;
-
-  int cod;
 
   String unit;
 

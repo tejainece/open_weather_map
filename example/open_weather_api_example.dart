@@ -12,4 +12,6 @@ main() async {
   final api = OpenWeatherApi(apiKey);
 
   print(await api.byId("2172797"));
+
+  print(await api.dailyForecastsById("2172797"));
 }

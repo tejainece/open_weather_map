@@ -57,3 +57,38 @@ class SysSerializer extends Serializer<Sys> with _$SysSerializer {}
 ])
 class CurrentWeatherSerializer extends Serializer<CurrentWeather>
     with _$CurrentWeatherSerializer {}
+
+@GenSerializer()
+class CitySerializer extends Serializer<City> with _$CitySerializer {}
+
+@GenSerializer(
+  fields: {
+    "tempDay": EnDecode(alias: 'day', processor: doubleToNumProcessor),
+    "tempMin": EnDecode(alias: 'min', processor: doubleToNumProcessor),
+    "tempMax": EnDecode(alias: 'max', processor: doubleToNumProcessor),
+    "tempNight": EnDecode(alias: 'night', processor: doubleToNumProcessor),
+    "tempEvening": EnDecode(alias: 'eve', processor: doubleToNumProcessor),
+    "tempMorning": EnDecode(alias: 'morn', processor: doubleToNumProcessor),
+  },
+)
+class DailyTemperatureSerializer extends Serializer<DailyTemperature>
+    with _$DailyTemperatureSerializer {}
+
+@GenSerializer(
+  fields: {
+    "temperature": EnDecode(alias: 'temp'),
+    "conditions": EnDecode(alias: 'weather'),
+    "degree": EnDecode(alias: 'deg'),
+  },
+)
+class DailyForecastSerializer extends Serializer<DailyForecast>
+    with _$DailyForecastSerializer {}
+
+@GenSerializer(
+  fields: {
+    "count": EnDecode(alias: 'cnt'),
+    "forecasts": EnDecode(alias: 'list'),
+  },
+)
+class DailyForecastsSerializer extends Serializer<DailyForecasts>
+    with _$DailyForecastsSerializer {}
