@@ -1,0 +1,19 @@
+name: open_weather_api
+description: Client library to access Open Weather Map API.
+version: 1.0.0-dev.0
+homepage: https://github.com/tejainece/open_weather_map
+author: Ravi Teja Gudapati <tejainece@gmail.com>
+
+environment:
+  sdk: '>=2.1.0 <3.0.0'
+
+dependencies:
+  jaguar_serializer: ^2.2.10
+  jaguar_resty: ^2.10.12
+
+dev_dependencies:
+  pedantic: ^1.0.0
+  test: ^1.0.0
+  build_runner:
+  jaguar_serializer_cli:
+  jaguar_retrofit_gen:
