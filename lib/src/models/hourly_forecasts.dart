@@ -1,7 +1,7 @@
 import 'models.dart';
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
-import 'simplified_models.dart' as simple;
+import 'simple.dart' as simple;
 
 class HourlyForecast {
   int dt;

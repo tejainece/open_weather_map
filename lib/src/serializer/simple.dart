@@ -3,7 +3,7 @@ import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:open_weather_api/src/models/models.dart'
     show Wind, Coord, Condition;
 
-import 'package:open_weather_api/src/models/simplified_models.dart';
+import 'package:open_weather_api/src/models/simple.dart';
 
 import 'serializer.dart';
 

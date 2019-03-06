@@ -2,6 +2,8 @@ import 'models.dart' as model;
 
 import 'package:open_weather_api/src/serializer/simple.dart';
 
+export 'package:open_weather_api/src/models/models.dart' show Coord, Wind, Condition;
+
 class Weather {
   final int id;
 

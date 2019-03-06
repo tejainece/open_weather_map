@@ -1,6 +1,6 @@
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
-import 'simplified_models.dart' as simple;
+import 'simple.dart' as simple;
 
 export 'daily_forecast.dart';
 export 'hourly_forecasts.dart';
