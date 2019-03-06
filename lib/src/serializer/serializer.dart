@@ -6,31 +6,32 @@ part 'serializer.jser.dart';
 
 @GenSerializer(
   fields: {
-    'longitude': EnDecode(alias: 'lon'),
-    'latitude': EnDecode(alias: 'lat'),
+    'longitude': EnDecode(alias: 'lon', processor: doubleToNumProcessor),
+    'latitude': EnDecode(alias: 'lat', processor: doubleToNumProcessor),
   },
 )
 class CoordSerializer extends Serializer<Coord> with _$CoordSerializer {}
 
 @GenSerializer(
   fields: {
-    'degree': EnDecode(alias: 'deg'),
+    'speed': EnDecode(processor: doubleToNumProcessor),
+    'degree': EnDecode(alias: 'deg', processor: doubleToNumProcessor),
   },
 )
 class WindSerializer extends Serializer<Wind> with _$WindSerializer {}
 
 @GenSerializer(
   fields: {
-    'oneH': EnDecode(alias: '1h'),
-    'threeH': EnDecode(alias: '3h'),
+    'oneH': EnDecode(alias: '1h', processor: doubleToNumProcessor),
+    'threeH': EnDecode(alias: '3h', processor: doubleToNumProcessor),
   },
 )
 class SnowSerializer extends Serializer<Snow> with _$SnowSerializer {}
 
 @GenSerializer(
   fields: {
-    'oneH': EnDecode(alias: '1h'),
-    'threeH': EnDecode(alias: '3h'),
+    'oneH': EnDecode(alias: '1h', processor: doubleToNumProcessor),
+    'threeH': EnDecode(alias: '3h', processor: doubleToNumProcessor),
   },
 )
 class RainSerializer extends Serializer<Rain> with _$RainSerializer {}
@@ -92,3 +93,21 @@ class DailyForecastSerializer extends Serializer<DailyForecast>
 )
 class DailyForecastsSerializer extends Serializer<DailyForecasts>
     with _$DailyForecastsSerializer {}
+
+@GenSerializer(
+  fields: {
+    "weather": EnDecode(alias: 'main'),
+    "conditions": EnDecode(alias: 'weather'),
+  },
+)
+class HourlyForecastSerializer extends Serializer<HourlyForecast>
+    with _$HourlyForecastSerializer {}
+
+@GenSerializer(
+  fields: {
+    "count": EnDecode(alias: 'cnt'),
+    "forecasts": EnDecode(alias: 'list'),
+  },
+)
+class HourlyForecastsSerializer extends Serializer<HourlyForecasts>
+    with _$HourlyForecastsSerializer {}

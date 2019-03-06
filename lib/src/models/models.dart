@@ -1,6 +1,7 @@
 import 'package:open_weather_api/src/serializer/serializer.dart';
 
 export 'daily_forecast.dart';
+export 'hourly_forecasts.dart';
 
 /// Coordinate
 class Coord {
@@ -25,7 +26,7 @@ class Wind {
   double speed;
 
   /// Wind direction, degrees (meteorological)
-  int degree;
+  double degree;
 
   Map<String, dynamic> toJson() => serializer.toMap(this);
 
@@ -37,10 +38,10 @@ class Wind {
 /// Snow weather information
 class Snow {
   /// Snow volume for the last 1 hour, mm
-  int oneH;
+  double oneH;
 
   /// Snow volume for the last 3 hours, mm
-  int threeH;
+  double threeH;
 
   Map<String, dynamic> toJson() => serializer.toMap(this);
 

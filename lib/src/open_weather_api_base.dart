@@ -186,6 +186,25 @@ class OpenWeatherApi {
 
     return ret;
   }
+
+  Future<HourlyForecasts> hourlyForecastsById(String id,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req =
+        route.get.path('forecast').queries({"id": id, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(HourlyForecasts.serializer.fromMap);
+
+    return ret;
+  }
 }
 
 class Country {

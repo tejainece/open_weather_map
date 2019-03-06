@@ -14,4 +14,6 @@ main() async {
   print(await api.byId("2172797"));
 
   print(await api.dailyForecastsById("2172797"));
+
+  print(await api.hourlyForecastsById("2172797"));
 }

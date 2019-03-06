@@ -7,12 +7,13 @@ part of 'serializer.dart';
 // **************************************************************************
 
 abstract class _$CoordSerializer implements Serializer<Coord> {
+  final _doubleToNumProcessor = const DoubleToNumProcessor();
   @override
   Map<String, dynamic> toMap(Coord model) {
     if (model == null) return null;
     Map<String, dynamic> ret = <String, dynamic>{};
-    setMapValue(ret, 'lon', model.longitude);
-    setMapValue(ret, 'lat', model.latitude);
+    setMapValue(ret, 'lon', _doubleToNumProcessor.serialize(model.longitude));
+    setMapValue(ret, 'lat', _doubleToNumProcessor.serialize(model.latitude));
     return ret;
   }
 
@@ -20,19 +21,20 @@ abstract class _$CoordSerializer implements Serializer<Coord> {
   Coord fromMap(Map map) {
     if (map == null) return null;
     final obj = new Coord();
-    obj.longitude = map['lon'] as double;
-    obj.latitude = map['lat'] as double;
+    obj.longitude = _doubleToNumProcessor.deserialize(map['lon'] as num);
+    obj.latitude = _doubleToNumProcessor.deserialize(map['lat'] as num);
     return obj;
   }
 }
 
 abstract class _$WindSerializer implements Serializer<Wind> {
+  final _doubleToNumProcessor = const DoubleToNumProcessor();
   @override
   Map<String, dynamic> toMap(Wind model) {
     if (model == null) return null;
     Map<String, dynamic> ret = <String, dynamic>{};
-    setMapValue(ret, 'speed', model.speed);
-    setMapValue(ret, 'deg', model.degree);
+    setMapValue(ret, 'speed', _doubleToNumProcessor.serialize(model.speed));
+    setMapValue(ret, 'deg', _doubleToNumProcessor.serialize(model.degree));
     return ret;
   }
 
@@ -40,19 +42,20 @@ abstract class _$WindSerializer implements Serializer<Wind> {
   Wind fromMap(Map map) {
     if (map == null) return null;
     final obj = new Wind();
-    obj.speed = map['speed'] as double;
-    obj.degree = map['deg'] as int;
+    obj.speed = _doubleToNumProcessor.deserialize(map['speed'] as num);
+    obj.degree = _doubleToNumProcessor.deserialize(map['deg'] as num);
     return obj;
   }
 }
 
 abstract class _$SnowSerializer implements Serializer<Snow> {
+  final _doubleToNumProcessor = const DoubleToNumProcessor();
   @override
   Map<String, dynamic> toMap(Snow model) {
     if (model == null) return null;
     Map<String, dynamic> ret = <String, dynamic>{};
-    setMapValue(ret, '1h', model.oneH);
-    setMapValue(ret, '3h', model.threeH);
+    setMapValue(ret, '1h', _doubleToNumProcessor.serialize(model.oneH));
+    setMapValue(ret, '3h', _doubleToNumProcessor.serialize(model.threeH));
     return ret;
   }
 
@@ -60,19 +63,20 @@ abstract class _$SnowSerializer implements Serializer<Snow> {
   Snow fromMap(Map map) {
     if (map == null) return null;
     final obj = new Snow();
-    obj.oneH = map['1h'] as int;
-    obj.threeH = map['3h'] as int;
+    obj.oneH = _doubleToNumProcessor.deserialize(map['1h'] as num);
+    obj.threeH = _doubleToNumProcessor.deserialize(map['3h'] as num);
     return obj;
   }
 }
 
 abstract class _$RainSerializer implements Serializer<Rain> {
+  final _doubleToNumProcessor = const DoubleToNumProcessor();
   @override
   Map<String, dynamic> toMap(Rain model) {
     if (model == null) return null;
     Map<String, dynamic> ret = <String, dynamic>{};
-    setMapValue(ret, '1h', model.oneH);
-    setMapValue(ret, '3h', model.threeH);
+    setMapValue(ret, '1h', _doubleToNumProcessor.serialize(model.oneH));
+    setMapValue(ret, '3h', _doubleToNumProcessor.serialize(model.threeH));
     return ret;
   }
 
@@ -80,8 +84,8 @@ abstract class _$RainSerializer implements Serializer<Rain> {
   Rain fromMap(Map map) {
     if (map == null) return null;
     final obj = new Rain();
-    obj.oneH = map['1h'] as double;
-    obj.threeH = map['3h'] as double;
+    obj.oneH = _doubleToNumProcessor.deserialize(map['1h'] as num);
+    obj.threeH = _doubleToNumProcessor.deserialize(map['3h'] as num);
     return obj;
   }
 }
@@ -385,6 +389,94 @@ abstract class _$DailyForecastsSerializer
     obj.count = map['cnt'] as int;
     obj.forecasts = codeIterable<DailyForecast>(map['list'] as Iterable,
         (val) => _dailyForecastSerializer.fromMap(val as Map));
+    return obj;
+  }
+}
+
+abstract class _$HourlyForecastSerializer
+    implements Serializer<HourlyForecast> {
+  Serializer<Weather> __weatherSerializer;
+  Serializer<Weather> get _weatherSerializer =>
+      __weatherSerializer ??= new WeatherSerializer();
+  Serializer<Condition> __conditionSerializer;
+  Serializer<Condition> get _conditionSerializer =>
+      __conditionSerializer ??= new ConditionSerializer();
+  Serializer<Snow> __snowSerializer;
+  Serializer<Snow> get _snowSerializer =>
+      __snowSerializer ??= new SnowSerializer();
+  Serializer<Rain> __rainSerializer;
+  Serializer<Rain> get _rainSerializer =>
+      __rainSerializer ??= new RainSerializer();
+  Serializer<Wind> __windSerializer;
+  Serializer<Wind> get _windSerializer =>
+      __windSerializer ??= new WindSerializer();
+  Serializer<Clouds> __cloudsSerializer;
+  Serializer<Clouds> get _cloudsSerializer =>
+      __cloudsSerializer ??= new CloudsSerializer();
+  @override
+  Map<String, dynamic> toMap(HourlyForecast model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'dt', model.dt);
+    setMapValue(ret, 'main', _weatherSerializer.toMap(model.weather));
+    setMapValue(
+        ret,
+        'weather',
+        codeIterable(model.conditions,
+            (val) => _conditionSerializer.toMap(val as Condition)));
+    setMapValue(ret, 'snow', _snowSerializer.toMap(model.snow));
+    setMapValue(ret, 'rain', _rainSerializer.toMap(model.rain));
+    setMapValue(ret, 'wind', _windSerializer.toMap(model.wind));
+    setMapValue(ret, 'clouds', _cloudsSerializer.toMap(model.clouds));
+    return ret;
+  }
+
+  @override
+  HourlyForecast fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new HourlyForecast();
+    obj.dt = map['dt'] as int;
+    obj.weather = _weatherSerializer.fromMap(map['main'] as Map);
+    obj.conditions = codeIterable<Condition>(map['weather'] as Iterable,
+        (val) => _conditionSerializer.fromMap(val as Map));
+    obj.snow = _snowSerializer.fromMap(map['snow'] as Map);
+    obj.rain = _rainSerializer.fromMap(map['rain'] as Map);
+    obj.wind = _windSerializer.fromMap(map['wind'] as Map);
+    obj.clouds = _cloudsSerializer.fromMap(map['clouds'] as Map);
+    return obj;
+  }
+}
+
+abstract class _$HourlyForecastsSerializer
+    implements Serializer<HourlyForecasts> {
+  Serializer<City> __citySerializer;
+  Serializer<City> get _citySerializer =>
+      __citySerializer ??= new CitySerializer();
+  Serializer<HourlyForecast> __hourlyForecastSerializer;
+  Serializer<HourlyForecast> get _hourlyForecastSerializer =>
+      __hourlyForecastSerializer ??= new HourlyForecastSerializer();
+  @override
+  Map<String, dynamic> toMap(HourlyForecasts model) {
+    if (model == null) return null;
+    Map<String, dynamic> ret = <String, dynamic>{};
+    setMapValue(ret, 'city', _citySerializer.toMap(model.city));
+    setMapValue(ret, 'cnt', model.count);
+    setMapValue(
+        ret,
+        'list',
+        codeIterable(model.forecasts,
+            (val) => _hourlyForecastSerializer.toMap(val as HourlyForecast)));
+    return ret;
+  }
+
+  @override
+  HourlyForecasts fromMap(Map map) {
+    if (map == null) return null;
+    final obj = new HourlyForecasts();
+    obj.city = _citySerializer.fromMap(map['city'] as Map);
+    obj.count = map['cnt'] as int;
+    obj.forecasts = codeIterable<HourlyForecast>(map['list'] as Iterable,
+        (val) => _hourlyForecastSerializer.fromMap(val as Map));
     return obj;
   }
 }

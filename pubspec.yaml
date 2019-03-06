@@ -1,6 +1,6 @@
 name: open_weather_api
 description: Client library to access Open Weather Map API.
-version: 1.0.0-dev.1
+version: 1.5.0
 homepage: https://github.com/tejainece/open_weather_map
 author: Ravi Teja Gudapati <tejainece@gmail.com>
 
