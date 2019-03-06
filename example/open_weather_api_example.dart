@@ -8,7 +8,7 @@ main() async {
   globalClient = IOClient();
 
   final apiKey = Platform.environment["OWM_API_KEY"];
-  
+
   final api = OpenWeatherApi(apiKey);
 
   print(await api.byId("2172797"));

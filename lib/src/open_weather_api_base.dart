@@ -127,9 +127,51 @@ class Language {
 
   const Language(this.name, this.value);
 
-  static const english = Language("English", "en");
+  static const english = Language("English", "EN");
 
-  static const russian = Language("Russian", "ru");
+  static const russian = Language("Russian", "RU");
+
+  static const italian = Language("Italian", "IT");
+
+  static const spanish = Language("Spanish", "ES");
+
+  static const spanish1 = Language("Spanish", "SP");
+
+  static const ukrainian = Language("Ukrainian", "UK");
+
+  static const ukrainian1 = Language("Ukrainian", "UA");
+
+  static const german = Language("German", "DE");
+
+  static const portuguese = Language("Portuguese", "PT");
+
+  static const romanian = Language("Romanian", "RO");
+
+  static const polish = Language("Polish", "PL");
+
+  static const finnish = Language("Finnish", "FI");
+
+  static const dutch = Language("Dutch", "NL");
+
+  static const french = Language("French", "FR");
+
+  static const bulgarian = Language("Bulgarian", "BG");
+
+  static const swedish = Language("Swedish", "SV");
+
+  static const swedish1 = Language("Swedish", "SE");
+
+  static const turkish = Language("Turkish", "TR");
+
+  static const Croatian = Language("croatian", "HR");
+
+  static const catalan = Language("Catalan", "CA");
+
+  static const chineseTraditional = Language("Chinese Traditional", "ZH_TW");
+
+  static const chineseSimplified = Language("Chinese Simplified", "ZH");
+
+  static const chineseSimplified1 = Language("Chinese Simplified", "ZH_CN");
 }
 
 class TemperatureUnit {

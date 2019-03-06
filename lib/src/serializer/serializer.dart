@@ -48,12 +48,12 @@ class CloudsSerializer extends Serializer<Clouds> with _$CloudsSerializer {}
 @GenSerializer()
 class SysSerializer extends Serializer<Sys> with _$SysSerializer {}
 
-@GenSerializer(
-  fields: {
-    'weather': EnDecode(alias: 'main'),
-    'condition': EnDecode(alias: 'weather'),
-  },
-  ignore: ['unit', 'lang']
-)
+@GenSerializer(fields: {
+  'weather': EnDecode(alias: 'main'),
+  'condition': EnDecode(alias: 'weather'),
+}, ignore: [
+  'unit',
+  'lang'
+])
 class CurrentWeatherSerializer extends Serializer<CurrentWeather>
     with _$CurrentWeatherSerializer {}
