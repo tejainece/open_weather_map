@@ -26,8 +26,6 @@ class OpenWeatherApi {
 
     if (resp.statusCode != 200) throw resp;
 
-    print(resp.body);
-
     final ret = resp.decodeJson(CurrentWeather.serializer.fromMap);
 
     return ret;
@@ -55,9 +53,12 @@ class OpenWeatherApi {
 
   Future<CurrentWeather> byName(String name,
       {Language lang = Language.english,
-      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+      TemperatureUnit unit = TemperatureUnit.kelvin,
+      String country}) async {
+    String fullname = name + (country != null ? ',$country' : '');
+
     final req =
-        route.get.path('weather').queries({"q": name, "appid": _apiKey});
+        route.get.path('weather').queries({"q": fullname, "appid": _apiKey});
 
     if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
 
@@ -132,9 +133,13 @@ class OpenWeatherApi {
 
   Future<DailyForecasts> dailyForecastsByName(String name,
       {Language lang = Language.english,
-      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
-    final req =
-        route.get.path('forecast/daily').queries({"q": name, "appid": _apiKey});
+      TemperatureUnit unit = TemperatureUnit.kelvin,
+      String country}) async {
+    String fullname = name + (country != null ? ',$country' : '');
+
+    final req = route.get
+        .path('forecast/daily')
+        .queries({"q": fullname, "appid": _apiKey});
 
     if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
 
@@ -194,6 +199,68 @@ class OpenWeatherApi {
       TemperatureUnit unit = TemperatureUnit.kelvin}) async {
     final req =
         route.get.path('forecast').queries({"id": id, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(HourlyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<HourlyForecasts> hourlyForecastsByName(String name,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin,
+      String country}) async {
+    String fullname = name + (country != null ? ',$country' : '');
+
+    final req =
+        route.get.path('forecast').queries({"q": fullname, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(HourlyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<HourlyForecasts> hourlyForecastsByCoordinate(Coord coord,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req = route.get.path('forecast').queries(
+        {"lon": coord.longitude, "lat": coord.latitude, "appid": _apiKey});
+
+    if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
+
+    if (lang != Language.english) req.query("lang", lang.value);
+
+    final resp = await req.go();
+
+    if (resp.statusCode != 200) throw resp;
+
+    final ret = resp.decodeJson(HourlyForecasts.serializer.fromMap);
+
+    return ret;
+  }
+
+  Future<HourlyForecasts> hourlyForecastsByZipCode(
+      String zipcode, Country country,
+      {Language lang = Language.english,
+      TemperatureUnit unit = TemperatureUnit.kelvin}) async {
+    final req = route.get
+        .path('forecast')
+        .queries({"zip": "$zipcode,$country", "appid": _apiKey});
 
     if (unit != TemperatureUnit.kelvin) req.query("units", unit.value);
 
